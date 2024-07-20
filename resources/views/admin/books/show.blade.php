@@ -18,6 +18,7 @@
 </head>
 
 <body>
+
     <table class="table">
         <thead>
             <tr>
@@ -30,37 +31,28 @@
                 <th scope="col">price</th>
                 <th scope="col">quantity</th>
                 <th scope="col">category_name</th>
+                <th scope="col">action</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($books as $index => $item)
-                <tr>
-                    <th scope="row">{{ $index + 1 }}</th>
-                    <td>{{ $item->title }}</td>
-                    <td>{{ $item->thumbnail }}</td>
-                    <td>{{ $item->author }}</td>
-                    <td>{{ $item->publisher }}</td>
-                    <td>{{ $item->publication }}</td>
-                    <td>{{ $item->price }}</td>
-                    <td>{{ $item->quantity }}</td>
-                    <td>{{ $item->category_name }}</td>
-                    <td> <a class="btn btn-success" href="http://php3.test/show/{{ $item->id }}">
-                        xem
-                       </a></td>
-                </tr>
-            @endforeach
+
+            <tr>
+                <th scope="row">{{ $books->id }}</th>
+                <td>{{ $books->title }}</td>
+                <td>
+                    <img src="{{ Storage::url($books->thumbnail) }}" alt="" width="50px"
+                        height="50px">
+                </td>
+                <td>{{ $books->author }}</td>
+                <td>{{ $books->publisher }}</td>
+                <td>{{ $books->publication }}</td>
+                <td>{{ $books->price }}</td>
+                <td>{{ $books->quantity }}</td>
+                <td>{{ $books->category_name }}</td>
+            </tr>
+
         </tbody>
     </table>
-
-    @foreach ($cate as $item)
-    <tr>
-        <a class="btn btn-success" href="http://php3.test/book/{{ $item->id }}">
-            <td>{{ $item->id }}</td>
-            <td>{{ $item->name }}</td>
-        </a>
-    </tr>
-@endforeach
-
 
 </body>
 

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>cate</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
@@ -18,7 +18,6 @@
 </head>
 
 <body>
-    <h1>GIÁ CAO NHẤT</h1>
     <table class="table">
         <thead>
             <tr>
@@ -31,21 +30,25 @@
                 <th scope="col">price</th>
                 <th scope="col">quantity</th>
                 <th scope="col">category_name</th>
+                <th scope="col">action</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($highestPricedBooks as $index => $item)
+            @foreach ($books as $index => $item)
                 <tr>
                     <th scope="row">{{ $index + 1 }}</th>
                     <td>{{ $item->title }}</td>
-                    <td>{{ $item->thumbnail }}</td>
+                    <td>
+                        <img src="{{ Storage::url($item->thumbnail) }}" alt="" width="50px"
+                            height="50px">
+                    </td>
                     <td>{{ $item->author }}</td>
                     <td>{{ $item->publisher }}</td>
                     <td>{{ $item->publication }}</td>
                     <td>{{ $item->price }}</td>
                     <td>{{ $item->quantity }}</td>
                     <td>{{ $item->category_name }}</td>
-                    <td> <a class="btn btn-success" href="http://php3.test/show/{{ $item->id }}">
+                    <td> <a class="btn btn-success" href="{{ route('admin.books.show', $item->id) }}">
                         xem
                        </a></td>
                 </tr>
@@ -53,49 +56,16 @@
         </tbody>
     </table>
 
-    <h1>GIÁ THẤT NHẤT</h1>
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">title</th>
-                <th scope="col">thumbnail</th>
-                <th scope="col">author</th>
-                <th scope="col">publisher</th>
-                <th scope="col">publication</th>
-                <th scope="col">price</th>
-                <th scope="col">quantity</th>
-                <th scope="col">category_name</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($lowestPricedBooks as $index => $item)
-                <tr>
-                    <th scope="row">{{ $index + 1 }}</th>
-                    <td>{{ $item->title }}</td>
-                    <td>{{ $item->thumbnail }}</td>
-                    <td>{{ $item->author }}</td>
-                    <td>{{ $item->publisher }}</td>
-                    <td>{{ $item->publication }}</td>
-                    <td>{{ $item->price }}</td>
-                    <td>{{ $item->quantity }}</td>
-                    <td>{{ $item->category_name }}</td>
-                    <td> <a class="btn btn-success" href="http://php3.test/show/{{ $item->id }}">
-                     xem
-                    </a></td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-
     @foreach ($cate as $item)
-        <tr>
-            <a class="btn btn-success" href="http://php3.test/book/{{ $item->id }}">
-                <td>{{ $item->id }}</td>
-                <td>{{ $item->name }}</td>
-            </a>
-        </tr>
-    @endforeach
+    <tr>
+        <a class="btn btn-success" href="http://php3.test/book/{{ $item->id }}">
+            <td>{{ $item->id }}</td>
+            <td>{{ $item->name }}</td>
+        </a>
+    </tr>
+@endforeach
+
+
 </body>
 
 </html>
