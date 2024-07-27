@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -25,10 +26,13 @@ class BookController extends Controller
             ->select('books.*', 'categories.name as category_name')
             ->take(8)
             ->get();
-
+        $books = DB::table('books')
+            ->join('categories', 'books.category_id', '=', 'categories.id')
+            ->select('books.*', 'categories.name as category_name')
+            ->get();
         $cate = DB::table('categories')
             ->get();
-        return view(self::PATH_VIEW . __FUNCTION__, ['highestPricedBooks' => $highestPricedBooks, 'lowestPricedBooks' => $lowestPricedBooks, 'cate' => $cate]);
+        return view(self::PATH_VIEW . __FUNCTION__, ['books' => $books, 'highestPricedBooks' => $highestPricedBooks, 'lowestPricedBooks' => $lowestPricedBooks, 'cate' => $cate]);
     }
     public function findbycate($id)
     {
@@ -54,28 +58,23 @@ class BookController extends Controller
     }
     public function create()
     {
-        $cate = DB::table('categories')
-            ->get();
-        return view(self::PATH_VIEW . __FUNCTION__, ['cate' => $cate]);
+        $categories = Category::all();
+
+        return view(self::PATH_VIEW . __FUNCTION__, ['categories' => $categories]);
     }
     public function store(Request $request)
     {
-        $data = $request->except('thumbnail');
-        $data = [
-            'title' => $request->input('title'),
-            'author' => $request->input('author'),
-            'publisher' => $request->input('publisher'),
-            'publication' => $request->input('publication'),
-            'price' => $request->input('price'),
-            'quantity' => $request->input('quantity'),
-            'category_id' => $request->input('category_id'),
-        ];
+        $data = $request->except('thumbnail', '_token');
+        $data['thumbnail'] = '';
+
         if ($request->hasFile('thumbnail')) {
-            $data['thumbnail'] = Storage::put(self::PATH_UPLOAD, $request->file('thumbnail'));
+            // $data['thumbnail'] = Storage::put(self::PATH_UPLOAD, $request->file('thumbnail'));
+            $path_img = $request->file('thumbnail')->store('books');
+            $data['thumbnail'] = $path_img;
         }
 
-        DB::table('books')->insert($data);
-        return redirect()->route('admin.books.index');
+        Book::query()->create($data);
+        return redirect()->route('admin.books.index')->with('message', 'them du lieu thanh cong');
     }
     public function edit($id)
     {
@@ -121,18 +120,12 @@ class BookController extends Controller
 
         return redirect()->route('admin.books.show', $id);
     }
-    public function destroy($id)
+    public function destroy(Book $book)
     {
-        $book = DB::table('books')->where('id', $id)->first();
-
-        if (!$book) {
-            abort(404);
-        }
-
         if ($book->thumbnail && Storage::exists($book->thumbnail)) {
             Storage::delete($book->thumbnail);
         }
-        DB::table('books')->where('id', $id)->delete();
+        $book->delete();
 
         return redirect()->route('admin.books.index')->with('success', 'Sách đã được xóa thành công.');
     }

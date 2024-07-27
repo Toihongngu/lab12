@@ -17,7 +17,8 @@
 </head>
 
 <body>
-    <form method="POST" action="{{ route('admin.books.store') }}" enctype="multipart/form-data">
+    <div class="d-flex justify-content-center">
+    <form class="w-70" method="POST" action="{{ route('admin.books.store') }}" enctype="multipart/form-data">
  @csrf
 
         <div class="mb-3">
@@ -26,6 +27,7 @@
         </div>
 
         <div class="mb-3">
+            <img id='img' src="" alt="">
             <label for="thumbnail" class="form-label">Thumbnail</label>
             <input type="file" class="form-control" id="thumbnail" name="thumbnail" >
         </div>
@@ -59,7 +61,7 @@
             <label for="category_id" class="form-label">Category</label>
             <select class="form-select" id="category_id" name="category_id" required>
                 <!-- Options should be populated dynamically from the database -->
-                @foreach ($cate as $category)
+                @foreach ($categories as $category)
                     <option value="{{ $category->id }}">{{ $category->name }}</option>
                 @endforeach
             </select>
@@ -67,6 +69,14 @@
 
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+</div>
 </body>
-
+<script>
+    var thumbnail= document.querySelector("#thumbnail")
+    var img = document.querySelector("#img")
+    thumbnail.addEventListener('change', function(e){
+        e.preventDefault()
+        img.src = URL.createObjectURL(this.files[0])
+    })
+</script>
 </html>

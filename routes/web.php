@@ -18,9 +18,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class , 'index'])->name('home');
-
 Route::get('{id}/product', [HomeController::class, 'detail'])->name('detail');
-
 Route::get('/product', [HomeController::class , 'menu'])->name('product');
 
 Route::prefix('admin')->as('admin.')->group(function () {
@@ -32,10 +30,11 @@ Route::prefix('admin')->as('admin.')->group(function () {
         Route::post('store', [BookController::class, 'store'])->name('store');
         Route::get('{id}/edit', [BookController::class, 'edit'])->name('edit');
         Route::put('{id}/update', [BookController::class, 'update'])->name('update');
-        Route::delete('{id}/destroy', [BookController::class, 'destroy'])->name('destroy');
+        Route::delete('{book}/destroy', [BookController::class, 'destroy'])->name('destroy');
     });
 });
 
 
 Route::get('/cate', [CategoryController::class, 'index']);
+
 

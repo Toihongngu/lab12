@@ -28,7 +28,7 @@
 
         <div class="mb-3">
             <td>
-                <img src="{{ Storage::url($books->thumbnail) }}" alt="" width="100px"
+                <img id='img' src="{{ Storage::url($books->thumbnail) }}" alt="" width="100px"
                     height="50px">
             </td>
             <label for="thumbnail" class="form-label">Thumbnail</label>
@@ -79,5 +79,12 @@
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </body>
-
+<script>
+    var thumbnail= document.querySelector("#thumbnail")
+    var img = document.querySelector("#img")
+    thumbnail.addEventListener('change', function(e){
+        e.preventDefault()
+        img.src = URL.createObjectURL(this.files[0])
+    })
+</script>
 </html>
